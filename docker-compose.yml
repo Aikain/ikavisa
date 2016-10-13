@@ -3,3 +3,5 @@ services:
   ircbot:
     build: ircbot
     restart: always
+  hostname: ikavisa
+  domainname: gosu.fi
