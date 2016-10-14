@@ -9,6 +9,6 @@ public class IrcBot {
         System.out.println("Botti käynistetty");
         Bot bot = new Bot("ikavisabot", "ikavisa");
         bot.connect();
-        bot.joinChannel("#wilitestaa");
+        bot.join("#wilitestaa");
     }
 }

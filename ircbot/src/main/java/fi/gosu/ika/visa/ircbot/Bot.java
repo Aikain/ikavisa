@@ -6,6 +6,8 @@ import org.jibble.pircbot.PircBot;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Aikain on 13.10.2016.
@@ -14,12 +16,14 @@ public class Bot extends PircBot {
 
     private MessageHandler messageHandler;
     private Game game;
+    private List<String> channels;
 
     public Bot(String name, String login) {
         this.setName(name);
         this.setLogin(login);
         this.setVerbose(true);
         this.messageHandler = new MessageHandler(this);
+        this.channels = new ArrayList<>();
     }
 
     public void connect() {
@@ -32,6 +36,11 @@ public class Bot extends PircBot {
             e.printStackTrace();
             System.exit(-1);
         }
+    }
+
+    public void join(String channel) {
+        this.joinChannel(channel);
+        this.channels.add(channel);
     }
 
     public void restart() {
@@ -57,6 +66,21 @@ public class Bot extends PircBot {
     @Override
     public void onMessage(String channel, String sender, String login, String hostname, String message) {
         messageHandler.onMessage(channel, sender, login, hostname, message);
+    }
+
+    @Override
+    protected void onDisconnect() {
+        try {
+            this.reconnect();
+            channels.forEach(this::joinChannel);
+        } catch (Exception e) {
+            try {
+                Thread.sleep(15000);
+                onDisconnect();
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+        }
     }
 
     public boolean startGame(String channel, String sender, String login, String hostname, String[] args) {
