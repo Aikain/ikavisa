@@ -27,8 +27,6 @@ public class Bot extends PircBot {
         this.messageHandler = new MessageHandler(this);
         this.channels = new ArrayList<>();
         channels.addAll(config.getChannels());
-        startIdentServer();
-        connect();
     }
 
     public void connect() {
