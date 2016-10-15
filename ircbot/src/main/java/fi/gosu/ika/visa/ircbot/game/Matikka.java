@@ -16,29 +16,35 @@ public class Matikka implements Game {
     private char operator;
     private Map<String, Integer> points;
     private boolean run;
+    private boolean continuee;
 
     public Matikka() {
         this.points = new HashMap<>();
         this.run = false;
+        this.continuee = false;
     }
 
     @Override
     public void start(Bot bot, String channel, String sender, String login, String hostname, String[] args) {
+        if (this.run) return;
         this.bot = bot;
         this.channel = channel;
         this.run = true;
         generateNew();
+        simpleHelp();
     }
 
     @Override
     public void stop() {
         this.run = false;
+        this.continuee = true;
         bot.sendMessage(channel, "Kiitos kaikille pelaajille! Onneksi olkoon pärjänneille!");
         tilanne();
     }
 
     @Override
     public void reset() {
+        this.continuee = false;
         this.points.clear();
         generateNew();
         simpleHelp();
@@ -46,7 +52,7 @@ public class Matikka implements Game {
 
     @Override
     public void simpleHelp() {
-        bot.sendMessage(channel, "Tervetuloa matikka-peliin!");
+        bot.sendMessage(channel, "Tervetuloa " + (continuee ? "takaisin " : "") + "matikka-peliin!");
         bot.sendMessage(channel, "Tehtävänäsi on ratkaista yksinkertaisia laskutehtäviä. Onnea kaikille!");
         ask();
     }
