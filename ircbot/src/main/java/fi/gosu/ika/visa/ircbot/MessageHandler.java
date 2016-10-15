@@ -43,6 +43,7 @@ public class MessageHandler {
             case "auta":
             case "apua":
                 if (bot.getGame() != null) bot.getGame().help();
+                break;
             case "restart":
                 bot.restart();
             case "stop":
