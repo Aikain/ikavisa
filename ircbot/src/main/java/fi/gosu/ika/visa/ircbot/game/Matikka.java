@@ -3,6 +3,9 @@ package fi.gosu.ika.visa.ircbot.game;
 import fi.gosu.ika.visa.ircbot.Bot;
 import fi.gosu.ika.visa.ircbot.Game;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Aikain on 14.10.2016.
  */
@@ -11,11 +14,13 @@ public class Matikka implements Game {
     private String channel;
     private int first, second;
     private char operator;
+    private Map<String, Integer> points;
 
     @Override
     public void start(Bot bot, String channel, String sender, String login, String hostname, String[] args) {
         this.bot = bot;
         this.channel = channel;
+        this.points = new HashMap<>();
         generateNew();
     }
 
@@ -40,14 +45,16 @@ public class Matikka implements Game {
     @Override
     public void help() {
         bot.sendMessage(channel, "Tehtävänäsi on ratkaista yksinkertaisia laskutehtäviä.");
-        ask();
+        bot.sendMessage(channel, "Voit tarkistaa pistetilanteen komenolla: !tilanne");
     }
 
     @Override
     public void message(String channel, String sender, String login, String hostname, String message) {
         try {
             if (check(Integer.parseInt(message))) {
-                bot.sendMessage(channel, "Oikein!");
+                bot.sendMessage(channel, "Oikein! Piste " + sender + ":lle.");
+                int value = this.points.containsKey(sender) ? this.points.get(sender) : 0;
+                this.points.put(sender, value + 1);
                 generateNew();
                 ask();
             }
@@ -58,7 +65,15 @@ public class Matikka implements Game {
 
     @Override
     public void command(String channel, String sender, String login, String hostname, String command, String[] args) {
-
+        switch (command) {
+            case "tilanne":
+            case "info":
+            case "status":
+                bot.sendMessage(this.channel, "Pistetilanne: ");
+                for (Map.Entry<String, Integer> entry : this.points.entrySet()) {
+                    bot.sendMessage(this.channel, " " + entry.getKey() + ": " + entry.getValue() );
+                }
+        }
     }
 
     private void ask() {
