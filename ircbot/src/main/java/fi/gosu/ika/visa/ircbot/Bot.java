@@ -1,5 +1,6 @@
 package fi.gosu.ika.visa.ircbot;
 
+import org.jibble.pircbot.IdentServer;
 import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.PircBot;
 
@@ -17,22 +18,25 @@ public class Bot extends PircBot {
     private MessageHandler messageHandler;
     private Game game;
     private List<String> channels;
+    private Config config;
 
-    public Bot(String name, String login) {
-        this.setName(name);
-        this.setLogin(login);
-        this.setVerbose(true);
+    public Bot(Config config) {
+        this.setName(config.getName());
+        this.setLogin(config.getLogin());
+        this.setVerbose(config.getDebug());
+        this.config = config;
         this.messageHandler = new MessageHandler(this);
         this.channels = new ArrayList<>();
+        channels.addAll(config.getChannels());
+        connect();
     }
 
     public void connect() {
         try {
-            this.connect("irc.OnlineGamesNet.net");
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        } catch (IrcException e) {
+            this.connect(config.getServer());
+            this.sendRawLine(config.getLoginCmd().replace("$loginName", config.getLoginName()).replace("$loginPass", config.getLoginPass()));
+            channels.forEach(this::joinChannel);
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }
