@@ -57,7 +57,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.5.0</version>
                 <configuration>
-                    <mainClass>fi.gosu.ika.visa.ircbot.IrcBot</mainClass>
+                    <mainClass>fi.gosu.ika.visa.ircbot.Application</mainClass>
                 </configuration>
             </plugin>
         </plugins>
