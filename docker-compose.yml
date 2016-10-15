@@ -5,3 +5,18 @@ services:
     restart: always
     hostname: ikavisa
     domainname: gosu.fi
+    ports:
+      - "0.0.0.0:5564:113"
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_DATABASE=ikavisa
+    volumes:
+      - persistent_db:/var/lib/mysql
+
+volumes:
+  persistent_db:
+   driver: local
