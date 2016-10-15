@@ -1,4 +1,4 @@
-package fi.gosu.ika.visa.ircbot;
+package fi.gosu.ika.visa.ircbot.bot;
 
 /**
  * Created by Aikain on 13.10.2016.

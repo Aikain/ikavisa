@@ -1,7 +1,7 @@
 package fi.gosu.ika.visa.ircbot.game;
 
-import fi.gosu.ika.visa.ircbot.Bot;
-import fi.gosu.ika.visa.ircbot.Game;
+import fi.gosu.ika.visa.ircbot.bot.Bot;
+import fi.gosu.ika.visa.ircbot.bot.Game;
 
 import java.util.HashMap;
 import java.util.Map;

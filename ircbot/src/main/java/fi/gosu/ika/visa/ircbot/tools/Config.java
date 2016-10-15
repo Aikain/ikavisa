@@ -1,4 +1,4 @@
-package fi.gosu.ika.visa.ircbot;
+package fi.gosu.ika.visa.ircbot.tools;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

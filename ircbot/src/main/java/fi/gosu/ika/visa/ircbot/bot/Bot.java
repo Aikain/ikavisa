@@ -1,7 +1,6 @@
-package fi.gosu.ika.visa.ircbot;
+package fi.gosu.ika.visa.ircbot.bot;
 
-import org.jibble.pircbot.IdentServer;
-import org.jibble.pircbot.IrcException;
+import fi.gosu.ika.visa.ircbot.tools.Config;
 import org.jibble.pircbot.PircBot;
 
 import java.io.BufferedReader;
