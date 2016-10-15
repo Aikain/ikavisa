@@ -17,11 +17,15 @@ public class Matikka implements Game {
     private Map<String, Integer> points;
     private boolean run;
 
+    public Matikka() {
+        this.points = new HashMap<>();
+        this.run = false;
+    }
+
     @Override
     public void start(Bot bot, String channel, String sender, String login, String hostname, String[] args) {
         this.bot = bot;
         this.channel = channel;
-        this.points = new HashMap<>();
         this.run = true;
         generateNew();
     }
