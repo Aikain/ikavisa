@@ -18,11 +18,13 @@ public class Matikka implements Game {
     private Map<String, Integer> points;
     private boolean run;
     private boolean continuee;
+    private boolean pause;
 
     public Matikka() {
         this.points = new HashMap<>();
         this.run = false;
         this.continuee = false;
+        this.pause = false;
     }
 
     @Override
@@ -69,11 +71,11 @@ public class Matikka implements Game {
         if (!run) return;
         try {
             if (check(Integer.parseInt(message))) {
+                this.pause = true;
                 bot.sendMessage(channel, "Oikein! Piste " + user.getSender() + ":lle.");
                 int value = this.points.containsKey(user.getSender()) ? this.points.get(user.getSender()) : 0;
                 this.points.put(user.getSender(), value + 1);
-                generateNew();
-                ask();
+                setTimeout(this::generateAndAsk, 5000);
             }
         } catch (Exception e) {
 
@@ -118,6 +120,12 @@ public class Matikka implements Game {
         }
     }
 
+    private void generateAndAsk() {
+        generateNew();
+        ask();
+        this.pause = false;
+    }
+
     private boolean check(int tulos) {
         switch (operator) {
             case '+':
@@ -137,5 +145,17 @@ public class Matikka implements Game {
         for (Map.Entry<String, Integer> entry : this.points.entrySet()) {
             bot.sendMessage(this.channel, " " + entry.getKey() + ": " + entry.getValue() );
         }
+    }
+
+    private static void setTimeout(Runnable runnable, int delay){
+        new Thread(() -> {
+            try {
+                Thread.sleep(delay);
+                runnable.run();
+            }
+            catch (Exception e){
+                System.err.println(e);
+            }
+        }).start();
     }
 }
