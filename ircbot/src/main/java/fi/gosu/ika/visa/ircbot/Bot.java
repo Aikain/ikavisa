@@ -95,9 +95,12 @@ public class Bot extends PircBot {
 
     public boolean startGame(String channel, String sender, String login, String hostname, String[] args) {
         try {
-            game = (Game) Class.forName("fi.gosu.ika.visa.ircbot.game." + (args[0].charAt(0) + "").toUpperCase() + (args[0].length() > 1 ? args[0].substring(1) : "")).newInstance();
-            game.start(this, channel, sender, login, hostname, args);
-            game.simpleHelp();
+            Class gameClass = Class.forName("fi.gosu.ika.visa.ircbot.game." + (args[0].charAt(0) + "").toUpperCase() + (args[0].length() > 1 ? args[0].substring(1) : ""));
+            if (game == null || game.getClass() != gameClass) {
+                game = (Game) gameClass.newInstance();
+                game.start(this, channel, sender, login, hostname, args);
+                game.simpleHelp();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
