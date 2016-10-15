@@ -79,6 +79,10 @@ public class Matikka implements Game {
                 operator = '*';
                 break;
             case 3:
+                if (second == 0) {
+                    generateNew();
+                    return;
+                }
                 operator = '/';
                 first *= second;
                 break;
