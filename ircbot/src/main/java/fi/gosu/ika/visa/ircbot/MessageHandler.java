@@ -31,14 +31,18 @@ public class MessageHandler {
             case "käynnistä":
                 bot.startGame(channel, sender, login, hostname, args);
                 break;
+            case "pause":
             case "lopeta":
                 bot.stopGame();
-                bot.clearGame();
                 break;
             case "nollaa":
             case "reset":
                 if (bot.getGame() != null) bot.getGame().reset();
                 break;
+            case "help":
+            case "auta":
+            case "apua":
+                if (bot.getGame() != null) bot.getGame().help();
             case "restart":
                 bot.restart();
             case "stop":
