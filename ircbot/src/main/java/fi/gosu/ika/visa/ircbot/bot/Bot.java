@@ -1,7 +1,10 @@
 package fi.gosu.ika.visa.ircbot.bot;
 
+import fi.gosu.ika.visa.ircbot.domain.User;
+import fi.gosu.ika.visa.ircbot.service.UserService;
 import fi.gosu.ika.visa.ircbot.tools.Config;
 import org.jibble.pircbot.PircBot;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,12 +21,14 @@ public class Bot extends PircBot {
     private Game game;
     private List<String> channels;
     private Config config;
+    private UserService userService;
 
-    public Bot(Config config) {
+    public Bot(Config config, UserService userService) {
         this.setName(config.getName());
         this.setLogin(config.getLogin());
         this.setVerbose(config.getDebug());
         this.config = config;
+        this.userService = userService;
         this.messageHandler = new MessageHandler(this);
         this.channels = new ArrayList<>();
         channels.addAll(config.getChannels());
@@ -72,7 +77,7 @@ public class Bot extends PircBot {
 
     @Override
     public void onMessage(String channel, String sender, String login, String hostname, String message) {
-        messageHandler.onMessage(channel, sender, login, hostname, message);
+        messageHandler.onMessage(channel, userService.getUser(hostname, sender, login), message);
     }
 
     @Override
@@ -90,7 +95,7 @@ public class Bot extends PircBot {
         }
     }
 
-    public boolean startGame(String channel, String sender, String login, String hostname, String[] args) {
+    public boolean startGame(String channel, User user, String[] args) {
         if (args.length == 0) {
             if (game == null) return false;
         } else {
@@ -104,7 +109,7 @@ public class Bot extends PircBot {
                 return false;
             }
         }
-        game.start(this, channel, sender, login, hostname, args);
+        game.start(this, channel, user, args);
         return true;
     }
 
@@ -121,4 +126,6 @@ public class Bot extends PircBot {
     public void clearGame() {
         this.game = null;
     }
+
+    public UserService getUserService() { return userService; }
 }

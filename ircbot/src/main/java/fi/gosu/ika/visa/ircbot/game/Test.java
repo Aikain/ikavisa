@@ -2,6 +2,7 @@ package fi.gosu.ika.visa.ircbot.game;
 
 import fi.gosu.ika.visa.ircbot.bot.Bot;
 import fi.gosu.ika.visa.ircbot.bot.Game;
+import fi.gosu.ika.visa.ircbot.domain.User;
 
 /**
  * Created by Aikain on 14.10.2016.
@@ -15,7 +16,7 @@ public class Test implements Game {
     private String target;
 
     @Override
-    public void start(Bot bot, String channel, String sender, String login, String hostname, String[] args) {
+    public void start(Bot bot, String channel, User user, String[] args) {
         this.bot = bot;
         this.channel = channel;
         this.run = true;
@@ -48,21 +49,21 @@ public class Test implements Game {
     }
 
     @Override
-    public void message(String channel, String sender, String login, String hostname, String message) {
+    public void message(String channel, User user, String message) {
         if (message.equals(target)) {
-            if (++counter >= 6 && !lastSender.equals(sender)){
-                bot.sendMessage(this.channel, "Onneksi olkoon " + sender + "! Voitit pelin!");
+            if (!lastSender.equals(user.getSender()) && ++counter >= 6){
+                bot.sendMessage(this.channel, "Onneksi olkoon " + user.getSender() + "! Voitit pelin!");
                 reset();
-                target = sender + " on paras";
+                target = user.getSender() + " on paras";
                 bot.sendMessage(this.channel, "Aloitetaan uusi peli, uusi tavoite: '" + target + "'");
             } else {
-                lastSender = sender;
+                lastSender = user.getSender();
             }
         }
     }
 
     @Override
-    public void command(String channel, String sender, String login, String hostname, String command, String[] args) {
+    public void command(String channel, User user, String command, String[] args) {
         switch (command) {
             case "apua":
             case "help":

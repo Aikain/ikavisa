@@ -2,6 +2,7 @@ package fi.gosu.ika.visa.ircbot.game;
 
 import fi.gosu.ika.visa.ircbot.bot.Bot;
 import fi.gosu.ika.visa.ircbot.bot.Game;
+import fi.gosu.ika.visa.ircbot.domain.User;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +26,7 @@ public class Matikka implements Game {
     }
 
     @Override
-    public void start(Bot bot, String channel, String sender, String login, String hostname, String[] args) {
+    public void start(Bot bot, String channel, User user, String[] args) {
         if (this.run) return;
         this.bot = bot;
         this.channel = channel;
@@ -64,13 +65,13 @@ public class Matikka implements Game {
     }
 
     @Override
-    public void message(String channel, String sender, String login, String hostname, String message) {
+    public void message(String channel, User user, String message) {
         if (!run) return;
         try {
             if (check(Integer.parseInt(message))) {
-                bot.sendMessage(channel, "Oikein! Piste " + sender + ":lle.");
-                int value = this.points.containsKey(sender) ? this.points.get(sender) : 0;
-                this.points.put(sender, value + 1);
+                bot.sendMessage(channel, "Oikein! Piste " + user.getSender() + ":lle.");
+                int value = this.points.containsKey(user.getSender()) ? this.points.get(user.getSender()) : 0;
+                this.points.put(user.getSender(), value + 1);
                 generateNew();
                 ask();
             }
@@ -80,7 +81,7 @@ public class Matikka implements Game {
     }
 
     @Override
-    public void command(String channel, String sender, String login, String hostname, String command, String[] args) {
+    public void command(String channel, User user, String command, String[] args) {
         switch (command) {
             case "tilanne":
             case "info":

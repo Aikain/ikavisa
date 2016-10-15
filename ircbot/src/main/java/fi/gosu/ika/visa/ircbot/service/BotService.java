@@ -25,12 +25,14 @@ public class BotService {
     private Environment env;
 
     @Autowired
+    private UserService userService;
+    @Autowired
     private ConfigService configService;
     private Bot bot;
 
     @PostConstruct
     public void start() {
-        bot = new Bot(configService.getConfig());
+        bot = new Bot(configService.getConfig(), userService);
         startIdentServer();
         while (!isIdentServerRunning()) {
         }
