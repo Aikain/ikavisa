@@ -31,6 +31,7 @@ public class Matikka implements Game {
 
     @Override
     public void reset() {
+        this.points.clear();
         generateNew();
         simpleHelp();
     }
