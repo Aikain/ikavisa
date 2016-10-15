@@ -15,18 +15,22 @@ public class Matikka implements Game {
     private int first, second;
     private char operator;
     private Map<String, Integer> points;
+    private boolean run;
 
     @Override
     public void start(Bot bot, String channel, String sender, String login, String hostname, String[] args) {
         this.bot = bot;
         this.channel = channel;
         this.points = new HashMap<>();
+        this.run = true;
         generateNew();
     }
 
     @Override
     public void stop() {
-
+        this.run = false;
+        bot.sendMessage(channel, "Kiitos kaikille pelaajille! Onneksi olkoon pärjänneille!");
+        tilanne();
     }
 
     @Override
@@ -51,6 +55,7 @@ public class Matikka implements Game {
 
     @Override
     public void message(String channel, String sender, String login, String hostname, String message) {
+        if (!run) return;
         try {
             if (check(Integer.parseInt(message))) {
                 bot.sendMessage(channel, "Oikein! Piste " + sender + ":lle.");
@@ -70,10 +75,7 @@ public class Matikka implements Game {
             case "tilanne":
             case "info":
             case "status":
-                bot.sendMessage(this.channel, "Pistetilanne: ");
-                for (Map.Entry<String, Integer> entry : this.points.entrySet()) {
-                    bot.sendMessage(this.channel, " " + entry.getKey() + ": " + entry.getValue() );
-                }
+                tilanne();
         }
     }
 
@@ -117,5 +119,12 @@ public class Matikka implements Game {
                 return tulos == first / second;
         }
         return false;
+    }
+
+    private void tilanne() {
+        bot.sendMessage(this.channel, "Pistetilanne: ");
+        for (Map.Entry<String, Integer> entry : this.points.entrySet()) {
+            bot.sendMessage(this.channel, " " + entry.getKey() + ": " + entry.getValue() );
+        }
     }
 }
