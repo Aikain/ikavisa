@@ -2,9 +2,11 @@ package fi.gosu.ika.visa.ircbot.service;
 
 import fi.gosu.ika.visa.ircbot.bot.Bot;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -16,6 +18,11 @@ import java.net.SocketAddress;
  */
 @Service
 public class BotService {
+    private final String PROPERTY_NAME_IDENTSERVER_ADDRESS = "identServer.address";
+    private final String PROPERTY_NAME_IDENTSERVER_PORT = "identServer.port";
+
+    @Resource
+    private Environment env;
 
     @Autowired
     private ConfigService configService;
@@ -36,7 +43,7 @@ public class BotService {
         try {
             s = new Socket();
             s.setReuseAddress(true);
-            SocketAddress sa = new InetSocketAddress("localhost", 113);
+            SocketAddress sa = new InetSocketAddress(env.getRequiredProperty(PROPERTY_NAME_IDENTSERVER_ADDRESS), env.getRequiredProperty(PROPERTY_NAME_IDENTSERVER_PORT, Integer.class));
             s.connect(sa, 1000);
         } catch (IOException e) {
         } finally {
@@ -48,7 +55,6 @@ public class BotService {
                 }
             }
         }
-        System.out.println(run);
         return run;
     }
 
@@ -58,14 +64,13 @@ public class BotService {
             public void run() {
                 ServerSocket serverSocket = null;
                 try {
-                    serverSocket = new ServerSocket(113);
+                    serverSocket = new ServerSocket(env.getRequiredProperty(PROPERTY_NAME_IDENTSERVER_PORT, Integer.class));
                     serverSocket.setSoTimeout('\uea60');
                     while (true) {
                         Socket socket = serverSocket.accept();
                         BufferedReader socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                         BufferedWriter socketOut = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
                         String textIn = socketIn.readLine();
-                        System.out.println(textIn);
                         if (textIn != null && !textIn.isEmpty()) {
                             socketOut.write(textIn + " : USERID : UNIX : " + bot.getLogin() + "\r\n");
                             socketOut.flush();
