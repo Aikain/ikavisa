@@ -8,4 +8,4 @@
     <loginCmd>PRIVMSG AuthServ@Services.OnlineGamesNet.net :auth $loginName $loginPass</loginCmd>
     <server>irc.OnlineGamesNet.net</server>
     <channels>#wilitestaa</channels>
-</config
+</config>
