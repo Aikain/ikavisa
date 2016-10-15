@@ -48,6 +48,11 @@ public class Bot extends PircBot {
         this.channels.add(channel);
     }
 
+    public void leave(String channel) {
+        this.leave(channel);
+        this.channels.remove(channel);
+    }
+
     public void restart() {
         try {
             Process p = Runtime.getRuntime().exec("mvn exec:java");

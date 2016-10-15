@@ -46,6 +46,10 @@ public class MessageHandler {
                 break;
             case "join":
                 for (String arg : args) bot.join(arg);
+                break;
+            case "leave":
+                for (String arg : args) bot.leave(arg);
+                break;
             default:
                 if (bot.getGame() != null) bot.getGame().command(channel, sender, login, hostname, command, args);
         }
