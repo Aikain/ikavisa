@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<config>
+    <name>ikavisabot</name>
+    <login>ikavisabot</login>
+    <debug>true</debug>
+    <loginName>visabot</loginName>
+    <loginPass></loginPass>
+    <loginCmd>PRIVMSG AuthServ@Services.OnlineGamesNet.net :auth $loginName $loginPass</loginCmd>
+    <server>irc.OnlineGamesNet.net</server>
+    <channels>#wilitestaa</channels>
+</config
