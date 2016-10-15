@@ -48,8 +48,8 @@ public class Bot extends PircBot {
         this.channels.add(channel);
     }
 
-    public void leave(String channel) {
-        this.leave(channel);
+    public void leave(String channel, String sender) {
+        this.partChannel(channel, sender + " doesn't want to see me there anymore ='(");
         this.channels.remove(channel);
     }
 
