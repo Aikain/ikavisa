@@ -93,6 +93,7 @@ public class Matikka implements Game {
     }
 
     private void ask() {
+        if (!this.run) return;
         bot.sendMessage(channel, "Paljon on " + first + " " + operator + " " + second + " ?");
     }
 
