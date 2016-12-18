@@ -13,6 +13,9 @@ public class TietovisaPiste extends AbstractPersistable<Long> {
     String username;
     int points;
 
+    public TietovisaPiste() {
+    }
+
     public TietovisaPiste(String username, int points) {
         this.username = username;
         this.points = points;
