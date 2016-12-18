@@ -11,12 +11,12 @@ import javax.persistence.Entity;
 public class TietovisaPiste extends AbstractPersistable<Long> {
 
     String username;
-    int points;
+    Integer points;
 
     public TietovisaPiste() {
     }
 
-    public TietovisaPiste(String username, int points) {
+    public TietovisaPiste(String username, Integer points) {
         this.username = username;
         this.points = points;
     }
@@ -29,11 +29,11 @@ public class TietovisaPiste extends AbstractPersistable<Long> {
         this.username = username;
     }
 
-    public int getPoints() {
+    public Integer getPoints() {
         return points;
     }
 
-    public void setPoints(int points) {
+    public void setPoints(Integer points) {
         this.points = points;
     }
 
