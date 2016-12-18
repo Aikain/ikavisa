@@ -12,5 +12,5 @@ public interface TietovisaPisteRepository extends JpaRepository<TietovisaPiste, 
 
     TietovisaPiste findByUsername(String username);
 
-    List<TietovisaPiste> findAllOrderByPointsDesc();
+    List<TietovisaPiste> findAllOrderByPoints();
 }
