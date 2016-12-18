@@ -26,6 +26,6 @@ public class PointService {
     }
 
     public List<TietovisaPiste> getAllPoints() {
-        return tietovisaPisteRepository.findAllOrderByPoints();
+        return tietovisaPisteRepository.findAllByOrderByPointsDesc();
     }
 }
