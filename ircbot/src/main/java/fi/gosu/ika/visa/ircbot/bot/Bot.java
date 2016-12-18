@@ -1,6 +1,7 @@
 package fi.gosu.ika.visa.ircbot.bot;
 
 import fi.gosu.ika.visa.ircbot.domain.User;
+import fi.gosu.ika.visa.ircbot.service.PointService;
 import fi.gosu.ika.visa.ircbot.service.UserService;
 import fi.gosu.ika.visa.ircbot.tools.Config;
 import org.jibble.pircbot.PircBot;
@@ -22,6 +23,7 @@ public class Bot extends PircBot {
     private List<String> channels;
     private Config config;
     private UserService userService;
+    private PointService pointService;
 
     public Bot(Config config, UserService userService) {
         this.setName(config.getName());
@@ -128,4 +130,6 @@ public class Bot extends PircBot {
     }
 
     public UserService getUserService() { return userService; }
+
+    public PointService getPointService() { return pointService; }
 }

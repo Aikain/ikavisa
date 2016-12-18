@@ -2,6 +2,7 @@ package fi.gosu.ika.visa.ircbot.game;
 
 import fi.gosu.ika.visa.ircbot.bot.Bot;
 import fi.gosu.ika.visa.ircbot.bot.Game;
+import fi.gosu.ika.visa.ircbot.domain.TietovisaPiste;
 import fi.gosu.ika.visa.ircbot.domain.User;
 
 /**
@@ -42,11 +43,18 @@ public class Tietovisa implements Game {
 
     @Override
     public void message(String channel, User user, String message) {
-
+        if (!user.getName().equals("Tomiz")) {
+            bot.sendMessage(this.channel, "Oikein! Piste " + user.getName() + ":lle!");
+            bot.getPointService().addPoint(user.getName());
+        }
     }
 
     @Override
     public void command(String channel, User user, String command, String[] args) {
-
+        if (command.equals("pisteet")) {
+            for (TietovisaPiste tietovisaPiste : bot.getPointService().getAllPoints()) {
+                bot.sendMessage(this.channel, tietovisaPiste.getUsername() + ": " + tietovisaPiste.getPoints() + " pistettä");
+            }
+        }
     }
 }
