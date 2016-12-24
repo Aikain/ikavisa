@@ -37,6 +37,7 @@ public class UserService {
         if (user == null) user = new User();
         user.setSender(sender);
         user.setLogin(login);
+        user.setHostname(hostname);
         return user;
     }
 

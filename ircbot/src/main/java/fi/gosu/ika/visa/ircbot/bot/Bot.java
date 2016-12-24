@@ -2,6 +2,7 @@ package fi.gosu.ika.visa.ircbot.bot;
 
 import fi.gosu.ika.visa.ircbot.domain.User;
 import fi.gosu.ika.visa.ircbot.service.PointService;
+import fi.gosu.ika.visa.ircbot.service.QuestionService;
 import fi.gosu.ika.visa.ircbot.service.UserService;
 import fi.gosu.ika.visa.ircbot.tools.Config;
 import org.jibble.pircbot.PircBot;
@@ -24,13 +25,17 @@ public class Bot extends PircBot {
     private Config config;
     private UserService userService;
     private PointService pointService;
+    private QuestionService questionService;
 
-    public Bot(Config config, UserService userService) {
+
+    public Bot(Config config, UserService userService, PointService pointService, QuestionService questionService) {
         this.setName(config.getName());
         this.setLogin(config.getLogin());
         this.setVerbose(config.getDebug());
         this.config = config;
         this.userService = userService;
+        this.pointService = pointService;
+        this.questionService = questionService;
         this.messageHandler = new MessageHandler(this);
         this.channels = new ArrayList<>();
         channels.addAll(config.getChannels());
@@ -130,6 +135,6 @@ public class Bot extends PircBot {
     }
 
     public UserService getUserService() { return userService; }
-
     public PointService getPointService() { return pointService; }
+    public QuestionService getQuestionService() { return questionService; }
 }

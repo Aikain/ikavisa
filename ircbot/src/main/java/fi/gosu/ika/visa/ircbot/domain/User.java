@@ -36,7 +36,7 @@ public class User extends AbstractPersistable<Long> {
     }
 
     public String getName() {
-        return name;
+        return name != null ? name : sender;
     }
     public String getHostname() {
         return hostname;
