@@ -137,7 +137,7 @@ public class Tietovisa implements Game {
                         } catch (Exception e) {}
                         return;
                 }
-            case PLAYER:
+            case DEFAULT:
                 switch (command) {
                     case "pisteet":
                         List<TietovisaPiste> tietovisaPisteList = bot.getPointService().getAllPoints();
