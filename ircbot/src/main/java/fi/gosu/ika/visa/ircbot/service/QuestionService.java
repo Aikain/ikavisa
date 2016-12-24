@@ -37,7 +37,7 @@ public class QuestionService {
     }
 
     public Question getRandomQuestion() {
-        List<Question> questions = questionRepository.findTop50ByOrderByLastAskedDesc();
+        List<Question> questions = questionRepository.findTop50ByOrderByLastAskedAsc();
         Question question = questions.get((int) (Math.random() * questions.size()));
         question.setLastAsked(new Date(System.currentTimeMillis()));
         return questionRepository.save(question);
