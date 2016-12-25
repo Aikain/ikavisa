@@ -107,7 +107,7 @@ public class Tietovisa implements Game {
                 switch (command) {
                     case "resetPoints":
                         bot.getPointService().resetAll();
-                        bot.sendMessage(this.channel, "Kaikki pisteet resetattu!");
+                        bot.sendMessage(channel, "Kaikki pisteet resetattu!");
                         return;
                 }
             case GM:
@@ -117,23 +117,23 @@ public class Tietovisa implements Game {
                         for (Question q : bot.getQuestionService().getAll()) {
                             s += "#" + q.getId() + ", ";
                         }
-                        bot.sendMessage(this.channel, s.isEmpty() ? "Ei kysymyksiä! Laittakaan Tomppa töihin!" : s.substring(0, s.length()-2));
+                        bot.sendMessage(channel, s.isEmpty() ? "Ei kysymyksiä! Laittakaan Tomppa töihin!" : s.substring(0, s.length()-2));
                         return;
                     case "nayta":
                     case "näytä":
                         question = bot.getQuestionService().get(Long.parseLong(args[0]));
-                        bot.sendMessage(this.channel, "Kysymys #" + question.getId() + ": " + question.getQuest());
-                        bot.sendMessage(this.channel, "Kysytty viimeeksi: " + question.getLastAsked());
+                        bot.sendMessage(channel, "Kysymys #" + question.getId() + ": " + question.getQuest());
+                        bot.sendMessage(channel, "Kysytty viimeeksi: " + question.getLastAsked());
                         return;
                     case "lisaa":
                     case "lisää":
                         question = bot.getQuestionService().add(String.join(" ", args));
-                        bot.sendMessage(this.channel, "Kysymys #" + question.getId() + " lisätty!");
+                        bot.sendMessage(channel, "Kysymys #" + question.getId() + " lisätty!");
                         return;
                     case "poista":
                         try {
                             bot.getQuestionService().delete(Long.parseLong(args[0]));
-                            bot.sendMessage(this.channel, "Kysymys #" + args[0] + " poistettu!");
+                            bot.sendMessage(channel, "Kysymys #" + args[0] + " poistettu!");
                         } catch (Exception e) {}
                         return;
                 }
@@ -142,10 +142,10 @@ public class Tietovisa implements Game {
                     case "pisteet":
                         List<TietovisaPiste> tietovisaPisteList = bot.getPointService().getAllPoints();
                         for (TietovisaPiste tietovisaPiste : tietovisaPisteList) {
-                            bot.sendMessage(this.channel, tietovisaPiste.getUsername() + ": " + tietovisaPiste.getPoints() + " pistettä");
+                            bot.sendMessage(channel, tietovisaPiste.getUsername() + ": " + tietovisaPiste.getPoints() + " pistettä");
                         }
                         if (tietovisaPisteList.isEmpty()) {
-                            bot.sendMessage(this.channel, "Ei pisteitä kenelläkään!");
+                            bot.sendMessage(channel, "Ei pisteitä kenelläkään!");
                         }
                         return;
                     case "kysy":
