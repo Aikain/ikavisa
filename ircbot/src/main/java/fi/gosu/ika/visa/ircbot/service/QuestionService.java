@@ -41,7 +41,7 @@ public class QuestionService {
     }
 
     public Question getRandomQuestion() {
-        Pageable oldest = new PageRequest(0, 1, Sort.Direction.ASC, "lastAsked");
+        Pageable oldest = new PageRequest(0, 10, Sort.Direction.ASC, "lastAsked");
         Page<Question> questions = questionRepository.findAll(oldest);
         Question question = questions.getContent().get((int)(Math.random() * questions.getContent().size()));
         question.setLastAsked(new Date(System.currentTimeMillis()));
