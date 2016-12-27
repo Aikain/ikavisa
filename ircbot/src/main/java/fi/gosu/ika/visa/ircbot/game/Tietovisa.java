@@ -5,7 +5,10 @@ import fi.gosu.ika.visa.ircbot.bot.Game;
 import fi.gosu.ika.visa.ircbot.domain.Question;
 import fi.gosu.ika.visa.ircbot.domain.TietovisaPiste;
 import fi.gosu.ika.visa.ircbot.domain.User;
+import fi.gosu.ika.visa.ircbot.tools.LockMatch;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.List;
 
 /**
@@ -57,37 +60,42 @@ public class Tietovisa implements Game {
     @Override
     public void message(String channel, User user, String message) {
         if (!run) return;
-        if (message.equals(currentQuestion.getAnswer())) {
-            bot.sendMessage(this.channel, "Oikein!" + (bot.getPointService().addPoint(user) ? " Piste " + user.getName() + ":lle!" : ""));
+        if (checkAnswer(message, user)) {
             pickRandomQuestion();
             counter++;
             if (counter < 10 + (int)(Math.random() * 30)) {
-                new java.util.Timer().schedule(
-                        new java.util.TimerTask() {
-                            @Override
-                            public void run() {
-                                run = true;
-                                ask();
-                            }
-                        },
-                        (10 + (int) (Math.random() * 50)) * 1000
-                );
+                wait((10 + (int) (Math.random() * 50)));
             } else {
                 int min = 15 + (int)(Math.random()*45);
                 bot.sendMessage(this.channel, "Pidetään " + min + " minuutin happihyppely!");
-                new java.util.Timer().schedule(
-                        new java.util.TimerTask() {
-                            @Override
-                            public void run() {
-                                run = true;
-                                ask();
-                            }
-                        },
-                        min * 60000
-                );
+                wait(min);
             }
             stop();
         }
+    }
+
+    public boolean checkAnswer(String answer, User user){
+        answer = answer.toLowerCase().trim();
+        int p = LockMatch.lock_match(answer, currentQuestion.getAnswer());
+        if (p > 80) {
+            String msg = p == 100 ? "Oikein!" : "Ei ihan oikea vastaus, mutta " + p + "% oikein! Oikea vastaus: " + currentQuestion.getAnswer();
+            bot.sendMessage(this.channel, msg + (bot.getPointService().addPoint(user) ? " Piste " + user.getName() + ":lle!" : ""));
+            return true;
+        }
+        return false;
+    }
+
+    private void wait(int min) {
+        new java.util.Timer().schedule(
+            new java.util.TimerTask() {
+                @Override
+                public void run() {
+                    run = true;
+                    ask();
+                }
+            },
+            min * 60000
+        );
     }
 
     private void pickRandomQuestion() {
