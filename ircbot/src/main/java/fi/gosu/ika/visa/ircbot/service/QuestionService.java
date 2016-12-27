@@ -3,6 +3,10 @@ package fi.gosu.ika.visa.ircbot.service;
 import fi.gosu.ika.visa.ircbot.domain.Question;
 import fi.gosu.ika.visa.ircbot.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -37,8 +41,9 @@ public class QuestionService {
     }
 
     public Question getRandomQuestion() {
-        List<Question> questions = questionRepository.findTop50ByOrderByLastAskedAsc();
-        Question question = questions.get((int) (Math.random() * questions.size()));
+        Pageable oldest = new PageRequest(0, 15, Sort.Direction.ASC, "lastAsked");
+        Page<Question> questions = questionRepository.findAll(oldest);
+        Question question = questions.getContent().get((int)(Math.random() * questions.getTotalElements()));
         question.setLastAsked(new Date(System.currentTimeMillis()));
         return questionRepository.save(question);
     }
