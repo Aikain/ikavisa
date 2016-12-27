@@ -68,7 +68,7 @@ public class Tietovisa implements Game {
             } else {
                 int min = 15 + (int)(Math.random()*45);
                 bot.sendMessage(this.channel, "Pidetään " + min + " minuutin happihyppely!");
-                wait(min);
+                wait(min * 60);
             }
             stop();
         }
@@ -77,7 +77,7 @@ public class Tietovisa implements Game {
     public boolean checkAnswer(String answer, User user){
         answer = answer.toLowerCase().trim();
         int p = LockMatch.lock_match(answer, currentQuestion.getAnswer());
-        if (p > 80) {
+        if (p > 80 || (p > 70 && (currentQuestion.getAnswer().length() == 4 || currentQuestion.getAnswer().length() == 5))) {
             String msg = p == 100 ? "Oikein!" : "Ei ihan oikea vastaus, mutta " + p + "% oikein! Oikea vastaus: " + currentQuestion.getAnswer();
             bot.sendMessage(this.channel, msg + (bot.getPointService().addPoint(user) ? " Piste " + user.getName() + ":lle!" : ""));
             return true;
@@ -94,7 +94,7 @@ public class Tietovisa implements Game {
                     ask();
                 }
             },
-            min * 60000
+            min * 1000
         );
     }
 
