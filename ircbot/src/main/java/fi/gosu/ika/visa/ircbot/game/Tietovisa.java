@@ -123,6 +123,7 @@ public class Tietovisa implements Game {
                     case "näytä":
                         question = bot.getQuestionService().get(Long.parseLong(args[0]));
                         bot.sendMessage(channel, "Kysymys #" + question.getId() + ": " + question.getQuest());
+                        if (args.length > 1 && args[1].equals("all")) bot.sendMessage(channel, "Vastaus:" + question.getAnswer());
                         bot.sendMessage(channel, "Kysytty viimeeksi: " + question.getLastAsked());
                         return;
                     case "lisaa":
