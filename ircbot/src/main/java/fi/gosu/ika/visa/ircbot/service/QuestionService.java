@@ -55,4 +55,13 @@ public class QuestionService {
     public List<Question> getAll() {
         return questionRepository.findAll();
     }
+
+    public boolean updateQuestion(Long id, String newQuest) {
+        if (newQuest.isEmpty()) return false;
+        Question question = questionRepository.findOne(id);
+        if (question == null) return false;
+        question.setQuest(newQuest);
+        questionRepository.save(question);
+        return true;
+    }
 }
