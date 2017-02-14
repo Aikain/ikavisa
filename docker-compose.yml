@@ -11,12 +11,9 @@ services:
       - mysql
   mysql:
     image: mysql:latest
+    restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=
       - MYSQL_DATABASE=ikavisa
     volumes:
-      - persistent_db:/var/lib/mysql
-
-volumes:
-  persistent_db:
-   driver: local
+      - /srv/data/ikavisa/mysql:/var/lib/mysql
