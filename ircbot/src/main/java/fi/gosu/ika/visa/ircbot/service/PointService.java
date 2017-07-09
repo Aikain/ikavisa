@@ -1,7 +1,9 @@
 package fi.gosu.ika.visa.ircbot.service;
 
+import fi.gosu.ika.visa.ircbot.domain.HirsipuuPiste;
 import fi.gosu.ika.visa.ircbot.domain.TietovisaPiste;
 import fi.gosu.ika.visa.ircbot.domain.User;
+import fi.gosu.ika.visa.ircbot.repository.HirsipuuPisteRepository;
 import fi.gosu.ika.visa.ircbot.repository.TietovisaPisteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +18,10 @@ import java.util.List;
 @Service
 public class PointService {
 
-    @Autowired
-    private TietovisaPisteRepository tietovisaPisteRepository;
+    @Autowired private TietovisaPisteRepository tietovisaPisteRepository;
+    @Autowired private HirsipuuPisteRepository hirsipuuPisteRepository;
 
-    public boolean addPoint(User user) {
+    public boolean addTietovisaPoint(User user) {
         boolean added = false;
         TietovisaPiste tietovisaPiste = tietovisaPisteRepository.findByUsername(user.getName());
         if (tietovisaPiste == null) {
@@ -37,13 +39,36 @@ public class PointService {
         return added;
     }
 
-    public List<TietovisaPiste> getAllPoints() {
+    public List<TietovisaPiste> getAllTietovisaPoints() {
         return tietovisaPisteRepository.findAllByOrderByPointsDesc();
     }
 
-    public void resetAll() {
+    public void resetAllTietovisa() {
         tietovisaPisteRepository.deleteAll();
     }
+
+    public boolean addHirsipuuPoint(User user) {
+        return addHirsipuuPoint(user, 1);
+    }
+
+    public boolean addHirsipuuPoint(User user, int i) {
+        HirsipuuPiste hirsipuuPiste = hirsipuuPisteRepository.findByUsername(user.getName());
+        if (hirsipuuPiste == null) {
+            hirsipuuPiste = new HirsipuuPiste(user.getName(), 0);
+        }
+        hirsipuuPiste.addPoint(i);
+        hirsipuuPisteRepository.save(hirsipuuPiste);
+        return true;
+    }
+
+    public List<HirsipuuPiste> getAllHirsipuuPoints() {
+        return hirsipuuPisteRepository.findAllByOrderByPointsDesc();
+    }
+
+    public void resetAllHirsipuu() {
+        hirsipuuPisteRepository.deleteAll();
+    }
+
 
     //TODO: siirrä toolseihin tms
     private boolean isSameDay(Calendar cal1, Calendar cal2) {
@@ -61,4 +86,5 @@ public class PointService {
         cal2.setTime(date2);
         return isSameDay(cal1, cal2);
     }
+
 }

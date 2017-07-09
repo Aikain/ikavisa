@@ -9,7 +9,7 @@ import java.util.Date;
  * Created by Ville on 18.12.2016.
  */
 @Entity
-public class TietovisaPiste extends AbstractPersistable<Long> {
+public class TietovisaPiste extends AbstractPersistable<Long> implements Piste {
 
     private String username;
     private Integer points;

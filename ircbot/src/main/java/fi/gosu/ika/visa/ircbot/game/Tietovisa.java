@@ -3,14 +3,11 @@ package fi.gosu.ika.visa.ircbot.game;
 import fi.gosu.ika.visa.ircbot.bot.Bot;
 import fi.gosu.ika.visa.ircbot.bot.Game;
 import fi.gosu.ika.visa.ircbot.domain.Question;
-import fi.gosu.ika.visa.ircbot.domain.TietovisaPiste;
 import fi.gosu.ika.visa.ircbot.domain.User;
 import fi.gosu.ika.visa.ircbot.tools.LockMatch;
+import fi.gosu.ika.visa.ircbot.tools.Tools;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -82,13 +79,13 @@ public class Tietovisa implements Game {
         int p = LockMatch.lock_match(answer, currentQuestion.getAnswer());
         if (p > 80 || (p > 70 && (currentQuestion.getAnswer().length() == 4 || currentQuestion.getAnswer().length() == 5))) {
             String msg = p == 100 ? "Oikein!" : "Ei ihan oikea vastaus, mutta " + p + "% oikein! Oikea vastaus: " + currentQuestion.getAnswer() + ".";
-            bot.sendMessage(this.channel, msg + (bot.getPointService().addPoint(user) ? " Piste " + user.getName() + ":lle!" : ""));
+            bot.sendMessage(this.channel, msg + (bot.getPointService().addTietovisaPoint(user) ? " Piste " + user.getName() + ":lle!" : ""));
             return true;
         }
         return false;
     }
 
-    private void wait(int min) {
+    private void wait(int sec) {
         new java.util.Timer().schedule(
             new java.util.TimerTask() {
                 @Override
@@ -97,7 +94,7 @@ public class Tietovisa implements Game {
                     ask();
                 }
             },
-            min * 1000
+            sec * 1000
         );
     }
 
@@ -117,7 +114,7 @@ public class Tietovisa implements Game {
             case ADMIN:
                 switch (command) {
                     case "resetPoints":
-                        bot.getPointService().resetAll();
+                        bot.getPointService().resetAllTietovisa();
                         bot.sendMessage(channel, "Kaikki pisteet resetattu!");
                         return;
                 }
@@ -157,36 +154,7 @@ public class Tietovisa implements Game {
             case DEFAULT:
                 switch (command) {
                     case "pisteet":
-                        List<TietovisaPiste> tietovisaPisteList = bot.getPointService().getAllPoints();
-                        if (args.length == 0) {
-                            if (tietovisaPisteList.isEmpty()) {
-                                bot.sendMessage(channel, "Ei pisteitä kenelläkään!");
-                                return;
-                            }
-                            for (int i = 0; i < tietovisaPisteList.size() && i < 3; i++) {
-                                bot.sendMessage(channel, (i + 1) + ") " + tietovisaPisteList.get(i).getUsername() + ": " + tietovisaPisteList.get(i).getPoints() + " pistettä");
-                            }
-                            String others = "";
-                            for (int i = 3; i < tietovisaPisteList.size(); i++) {
-                                others += tietovisaPisteList.get(i).getUsername() + " (" + tietovisaPisteList.get(i).getPoints() + "p)" + ", ";
-                            }
-                            if (!others.isEmpty())
-                                bot.sendMessage(channel, "Muille sijoille päässeet: " + others.substring(0, others.length() - 2));
-                        } else if (args.length <= 3){
-                            for (String name : args) {
-                                int i = 0;
-                                for (; i < tietovisaPisteList.size(); i++) {
-                                    if (tietovisaPisteList.get(i).getUsername().equals(name)) {
-                                        bot.sendMessage(channel, (i + 1) + ") " + tietovisaPisteList.get(i).getUsername() + ": " + tietovisaPisteList.get(i).getPoints() + " pistettä");
-                                        break;
-                                    }
-                                }
-                                if (i == tietovisaPisteList.size())
-                                    bot.sendMessage(channel,"Ei pisteitä pelaajalla '" + name + "'");
-                            }
-                        } else {
-                            bot.sendMessage(channel, "Voin kertoa maksimissaan kolmen käyttäjän pisteet kerralla.");
-                        }
+                        Tools.printPoints(bot, channel, args, bot.getPointService().getAllTietovisaPoints());
                         return;
                     case "kysy":
                     case "kysymys":
