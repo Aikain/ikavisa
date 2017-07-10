@@ -125,16 +125,16 @@ public class Hirsipuu implements Game {
                 bot.sendMessage(channel,
                         user.getName() + ": Oikein, +2 pistettä. " +
                             "Tiedätte sanasta: " + getHideWord() + ", " +
-                            "väärin arvatut kirjaimet: " + (fails.isEmpty() ? "" : fails.stream().map(Object::toString).reduce((acc, e) -> acc + e).get()) + ", " +
-                            "vääriäarvauksia jäljellä: " + (FAILS_MAX_COUNT - fails.size()));
+                            "yrityksiä jäljellä: " + (FAILS_MAX_COUNT - fails.size()) +
+                            (fails.isEmpty() ? "" : ", väärin arvatut kirjaimet: " + fails.stream().map(Object::toString).reduce((acc, e) -> acc + e).get()));
                 bot.getPointService().addHirsipuuPoint(user, 2);
             } else {
                 fails.add(c);
                 bot.sendMessage(channel,
                         user.getName() + ": Väärin, -1 pistettä. " +
                             "Tiedätte sanasta: " + getHideWord() + ", " +
-                            "väärin arvatut kirjaimet: " + fails.stream().map(Object::toString).reduce((acc, e) -> acc + e).get() + ", " +
-                            "vääriäarvauksia jäljellä: " + (FAILS_MAX_COUNT - fails.size()));
+                            "yrityksiä jäljellä: " + (FAILS_MAX_COUNT - fails.size()) +
+                            ", väärin arvatut kirjaimet: " + fails.stream().map(Object::toString).reduce((acc, e) -> acc + e).get());
                 bot.getPointService().addHirsipuuPoint(user, -1);
                 if (fails.size() >= FAILS_MAX_COUNT) {
                     run = false;
