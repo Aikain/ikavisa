@@ -5,7 +5,6 @@ import fi.gosu.ika.visa.ircbot.domain.TietovisaPiste;
 import fi.gosu.ika.visa.ircbot.domain.User;
 import fi.gosu.ika.visa.ircbot.repository.HirsipuuPisteRepository;
 import fi.gosu.ika.visa.ircbot.repository.TietovisaPisteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -18,8 +17,13 @@ import java.util.List;
 @Service
 public class PointService {
 
-    @Autowired private TietovisaPisteRepository tietovisaPisteRepository;
-    @Autowired private HirsipuuPisteRepository hirsipuuPisteRepository;
+    private final TietovisaPisteRepository tietovisaPisteRepository;
+    private final HirsipuuPisteRepository hirsipuuPisteRepository;
+
+    public PointService(TietovisaPisteRepository tietovisaPisteRepository, HirsipuuPisteRepository hirsipuuPisteRepository) {
+        this.tietovisaPisteRepository = tietovisaPisteRepository;
+        this.hirsipuuPisteRepository = hirsipuuPisteRepository;
+    }
 
     public boolean addTietovisaPoint(User user) {
         boolean added = false;

@@ -3,14 +3,14 @@ services:
   ircbot:
     build: ircbot
     restart: always
-    hostname: ikavisa
-    domainname: gosu.fi
+    hostname: ircbot
+    domainname: ikariam.aika.in
     ports:
       - "0.0.0.0:5564:113"
     depends_on:
       - mysql
   mysql:
-    image: mysql:latest
+    image: mysql:8
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=

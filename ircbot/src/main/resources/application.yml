@@ -1,0 +1,30 @@
+bot:
+    auth:
+        cmd: PRIVMSG AuthServ@Services.OnlineGamesNet.net :auth $loginName $loginPass
+        name: visabot
+        pass: ''
+    connect:
+        channels: '#wilitestaa'
+        debug: true
+        login: ikavisabot
+        name: ikavisabot
+        server: irc.OnlineGamesNet.net
+    admin:
+        hostname: wiliam.smod.IkariamFi
+        name: wiliam
+    identServer:
+        address:
+        port:
+spring:
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://db:3306/ikavisa
+        username: root
+        password:
+    jpa:
+        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+        generate-ddl: true
+        hibernate:
+            ddl-auto: update
+        open-in-view: true
+        show-sql: false

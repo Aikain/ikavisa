@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Aikain on 23.12.2016.
@@ -18,8 +19,11 @@ import java.util.List;
 @Service
 public class QuestionService {
 
-    @Autowired
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
+
+    public QuestionService(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
 
     public Question add(String s) {
         int i = s.lastIndexOf("--");
@@ -37,7 +41,7 @@ public class QuestionService {
     }
 
     public void delete(Long id) {
-        questionRepository.delete(id);
+        questionRepository.deleteById(id);
     }
 
     public Question getRandomQuestion() {
@@ -49,7 +53,7 @@ public class QuestionService {
     }
 
     public Question get(Long id) {
-        return questionRepository.findOne(id);
+        return questionRepository.getOne(id);
     }
 
     public List<Question> getAll() {
@@ -58,8 +62,9 @@ public class QuestionService {
 
     public boolean updateQuestion(Long id, String newQuest) {
         if (newQuest.isEmpty()) return false;
-        Question question = questionRepository.findOne(id);
-        if (question == null) return false;
+        Optional<Question> optionalQuestion = questionRepository.findById(id);
+        if (!optionalQuestion.isPresent()) return false;
+        Question question = optionalQuestion.get();
         question.setQuest(newQuest);
         questionRepository.save(question);
         return true;

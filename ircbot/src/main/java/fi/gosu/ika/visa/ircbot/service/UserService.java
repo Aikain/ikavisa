@@ -2,12 +2,10 @@ package fi.gosu.ika.visa.ircbot.service;
 
 import fi.gosu.ika.visa.ircbot.domain.User;
 import fi.gosu.ika.visa.ircbot.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 
 /**
  * Created by Aikain on 15.10.2016.
@@ -15,21 +13,23 @@ import javax.annotation.Resource;
 @Service
 public class UserService {
 
-    private final String PROPERTY_NAME_ADMIN_NAME = "admin.name";
-    private final String PROPERTY_NAME_ADMIN_HOSTNAME = "admin.hostname";
+    @Value("${bot.admin.name}")
+    private String adminName;
+    @Value("${bot.admin.hostname}")
+    private String adminHostName;
 
-    @Resource
-    private Environment env;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @PostConstruct
     public void init() {
         for (User user : userRepository.findAll()) {
             if (user.getRole() == User.ROLE.ADMIN) return;
         }
-        userRepository.save(new User(env.getRequiredProperty(PROPERTY_NAME_ADMIN_NAME), env.getRequiredProperty(PROPERTY_NAME_ADMIN_HOSTNAME), User.ROLE.ADMIN));
+        userRepository.save(new User(adminName, adminHostName, User.ROLE.ADMIN));
     }
 
     public User getUser(String hostname, String sender, String login) {
