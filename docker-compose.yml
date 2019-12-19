@@ -18,6 +18,6 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: ircbot
-      MYSQL_ROOT_PASSWORD:du6ieMahfaegee3ibeiv2ieM9ohbohma
+      MYSQL_ROOT_PASSWORD: du6ieMahfaegee3ibeiv2ieM9ohbohma
     volumes:
       - /srv/data/aikain/ikariam/ircbot/mysql:/var/lib/mysql
