@@ -169,14 +169,9 @@ public class Hirsipuu implements Game {
     }
 
     private void loadWords() {
-        try {
-            Scanner scanner = new Scanner(getClass().getResourceAsStream("sanalista.txt"));
-            while (scanner.hasNextLine()) {
-                words.add(scanner.nextLine());
-            }
-        } catch (FileNotFoundException e) {
-            bot.sendMessage(channel, "Sanoja ei voitu ladata!");
-            run = false;
+        Scanner scanner = new Scanner(getClass().getResourceAsStream("sanalista.txt"));
+        while (scanner.hasNextLine()) {
+            words.add(scanner.nextLine());
         }
     }
 }
