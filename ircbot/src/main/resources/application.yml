@@ -18,9 +18,9 @@ bot:
 spring:
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://db:3306/ikavisa
-        username: root
-        password:
+        password: ${DATABASE_PASSWORD}
+        url: ${DATABASE_URL}
+        username: ${DATABASE_USERNAME}
     jpa:
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         generate-ddl: true
