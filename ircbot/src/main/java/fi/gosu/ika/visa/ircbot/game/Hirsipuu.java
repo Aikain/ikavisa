@@ -170,7 +170,7 @@ public class Hirsipuu implements Game {
 
     private void loadWords() {
         try {
-            Scanner scanner = new Scanner(new File("src/main/resources/sanalista.txt"));
+            Scanner scanner = new Scanner(getClass().getResourceAsStream("sanalista.txt"));
             while (scanner.hasNextLine()) {
                 words.add(scanner.nextLine());
             }
